@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eu
+
+TP=$(mktemp)
+trap 'rm $TP' EXIT
+
+git log -1 --format=%B | fold -w 79 -s > $TP
+git commit --amend -F $TP
+
+
