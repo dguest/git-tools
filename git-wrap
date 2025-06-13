@@ -2,10 +2,16 @@
 
 set -eu
 
+if (( $# != 0 )) && ! [[ $1 =~ ^[0-9]+$ ]] ;
+then
+    echo "usage: ${0##*/} [width=79]" >&2
+    exit 1
+fi
+
 TP=$(mktemp)
 trap 'rm $TP' EXIT
 
-git log -1 --format=%B | fmt -w 79 > $TP
+git log -1 --format=%B | fmt -w ${1-79} > $TP
 git commit --amend -F $TP
 
 
